@@ -218,12 +218,20 @@
                                 <button onclick="triggerAI('tich_phan')" class="w-full py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-orange-400 text-[11px] font-black uppercase tracking-widest hover:bg-slate-900 transition-all">🤖 Sinh đề AI theo Ma trận</button>
                             </div>
                             
-                            <div class="space-y-2 h-max md:col-span-2">
+                            <div class="space-y-2 h-max">
                                 <button onclick="startQuiz('pt_mp_mc')" class="category-card p-5 flex flex-col gap-4 border-l-[5px] border-l-rose-500">
                                     <div class="flex items-center gap-4"><div class="icon-box shadow-lg shadow-rose-500/20 w-12 h-12 text-xl">🌐</div><h3 class="font-black text-white text-base leading-tight uppercase">PT Mặt phẳng, Đường thẳng</h3></div>
                                     <p class="text-xs text-rose-400/80 font-medium">Phương trình, Khoảng cách, Mặt cầu</p>
                                 </button>
                                 <button onclick="triggerAI('pt_mp_mc')" class="w-full py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-rose-400 text-[11px] font-black uppercase tracking-widest hover:bg-slate-900 transition-all">🤖 Sinh đề AI theo Ma trận</button>
+                            </div>
+
+                            <div class="space-y-2 h-max">
+                                <button onclick="startQuiz('xac_suat')" class="category-card p-5 flex flex-col gap-4 border-l-[5px] border-l-indigo-500">
+                                    <div class="flex items-center gap-4"><div class="icon-box shadow-lg shadow-indigo-500/20 w-12 h-12 text-xl">🎲</div><h3 class="font-black text-white text-base leading-tight uppercase">Xác suất</h3></div>
+                                    <p class="text-xs text-indigo-400/80 font-medium">Có điều kiện, Toàn phần, Công thức Bayes</p>
+                                </button>
+                                <button onclick="triggerAI('xac_suat')" class="w-full py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-indigo-400 text-[11px] font-black uppercase tracking-widest hover:bg-slate-900 transition-all">🤖 Sinh đề AI theo Ma trận</button>
                             </div>
                         </div>
                     </div>
@@ -459,6 +467,18 @@
                 { type: "tf", l: 2, q: "Cho đường thẳng $d: \\left\\{\\begin{matrix} x = 1 + t \\\\ y = 2 - t \\\\ z = 3t \\end{matrix}\\right.$ và $(P): x + y - 3 = 0$.", o: ["$d$ đi qua điểm $A(1; 2; 0)$.", "VTCP của $d$ là $(1; -1; 3)$.", "VTPT của $(P)$ là $(1; 1; -3)$.", "$d$ song song với $(P)$."], a: [true, true, false, false], t: "Đường thẳng và mặt phẳng", e: ["Đúng: Cho $t=0$ ta được $(1; 2; 0)$.", "Đúng: Hệ số của $t$.", "Sai: VTPT của $(P)$ là $(1; 1; 0)$ vì không có $z$.", "Sai: Điểm $A(1; 2; 0) \\in d$ nằm trên $(P)$, do đó $d$ nằm trong $(P)$ chứ không song song."] },
                 { type: "sa", l: 3, q: "Khoảng cách từ $A(1; 2; 3)$ đến mặt phẳng tọa độ $(Oxy)$ bằng bao nhiêu?", a: "3", t: "Khoảng cách", e: "Khoảng cách đến mặt $(Oxy)$ bằng trị tuyệt đối của cao độ $z$." },
                 { type: "sa", l: 4, q: "Tìm bán kính mặt cầu $(S): x^2 + y^2 + z^2 - 2x + 4y - 6z - 2 = 0$.", a: "4", t: "Phương trình mặt cầu", e: "Tâm $I(1; -2; 3)$. Bán kính $R = \\sqrt{1^2 + (-2)^2 + 3^2 - (-2)} = \\sqrt{16} = 4$." }
+            ]},
+            xac_suat: { title: "Xác suất", questions: [
+                { type: "mcq", l: 1, q: "Cho hai biến cố $A, B$ có $P(B) > 0$. Công thức tính xác suất có điều kiện $P(A|B)$ là:", o: ["$P(A)P(B)$", "$\\frac{P(A \\cap B)}{P(B)}$", "$P(A) + P(B)$", "$\\frac{P(A \\cap B)}{P(A)}$"], a: 1, t: "Xác suất có điều kiện", e: "Theo định nghĩa, xác suất có điều kiện của $A$ với điều kiện $B$ là $P(A|B) = \\frac{P(A \\cap B)}{P(B)}$." },
+                { type: "mcq", l: 2, q: "Cho $P(A)=0.4$, $P(B)=0.5$ và $P(A \\cap B)=0.2$. Tính $P(A|B)$.", o: ["$0.2$", "$0.4$", "$0.5$", "$0.8$"], a: 1, t: "Tính xác suất có điều kiện", e: "Áp dụng công thức $P(A|B) = \\frac{P(A \\cap B)}{P(B)} = \\frac{0.2}{0.5} = 0.4$." },
+                { type: "mcq", l: 2, q: "Một hộp có 3 bi đỏ và 2 bi xanh. Hộp thứ hai có 4 bi đỏ và 1 bi xanh. Chọn ngẫu nhiên một hộp rồi rút 1 bi. Xác suất rút được bi đỏ là:", o: ["$0.5$", "$0.6$", "$0.7$", "$0.8$"], a: 2, t: "Xác suất toàn phần", e: "Gọi $H_1, H_2$ là biến cố chọn hộp 1, 2. $P(H_1)=P(H_2)=0.5$. Xác suất rút bi đỏ: $P(D) = P(D|H_1)P(H_1) + P(D|H_2)P(H_2) = \\frac{3}{5} \\times 0.5 + \\frac{4}{5} \\times 0.5 = 0.3 + 0.4 = 0.7$." },
+                { type: "mcq", l: 3, q: "(Tiếp theo câu trên) Biết bi rút ra là bi đỏ. Xác suất để viên bi đó thuộc hộp thứ nhất là:", o: ["$\\frac{3}{7}$", "$\\frac{4}{7}$", "$\\frac{1}{2}$", "$\\frac{3}{5}$"], a: 0, t: "Công thức Bayes", e: "Áp dụng Bayes: $P(H_1|D) = \\frac{P(D|H_1)P(H_1)}{P(D)} = \\frac{0.3}{0.7} = \\frac{3}{7}$." },
+                { type: "mcq", l: 3, q: "Một phân xưởng có 2 máy. Máy 1 sản xuất 60% sản phẩm, máy 2 sản xuất 40%. Tỉ lệ phế phẩm của máy 1 và máy 2 lần lượt là 1% và 2%. Lấy ngẫu nhiên 1 sản phẩm. Tính xác suất lấy được phế phẩm.", o: ["$0.014$", "$0.015$", "$0.016$", "$0.017$"], a: 0, t: "Xác suất toàn phần", e: "Gọi $A$ là biến cố lấy được phế phẩm. $P(A) = 0.6 \\times 0.01 + 0.4 \\times 0.02 = 0.006 + 0.008 = 0.014$." },
+                { type: "tf", l: 2, q: "Cho hai biến cố $A$ và $B$ độc lập với nhau, $P(A)=0.3$ và $P(B)=0.6$. Xét các mệnh đề sau:", o: ["$P(A \\cap B) = 0.18$.", "$P(A \\cup B) = 0.9$.", "$P(A|B) = 0.3$.", "$P(\\overline{A}|B) = 0.7$."], a: [true, false, true, true], t: "Biến cố độc lập & Điều kiện", e: ["Đúng: $A, B$ độc lập nên $P(A \\cap B) = P(A)P(B) = 0.3 \\times 0.6 = 0.18$.", "Sai: $P(A \\cup B) = P(A)+P(B)-P(A \\cap B) = 0.3+0.6-0.18 = 0.72 \\neq 0.9$.", "Đúng: Vì $A, B$ độc lập nên $P(A|B) = P(A) = 0.3$.", "Đúng: $P(\\overline{A}|B) = 1 - P(A|B) = 1 - 0.3 = 0.7$."] },
+                { type: "tf", l: 3, q: "Trong một trường học, tỉ lệ học sinh bị cận thị là 20%. Trong số học sinh cận thị, 60% là nữ. Trong số học sinh không cận thị, 40% là nữ. Chọn ngẫu nhiên 1 học sinh.", o: ["Xác suất chọn được học sinh cận thị và là nữ là $0.12$.", "Tỉ lệ học sinh nữ của trường là $44\\%$.", "Xác suất chọn được học sinh cận thị, biết học sinh đó là nữ là $\\frac{3}{11}$.", "Biết học sinh chọn ra là nam, xác suất bị cận thị là $\\frac{1}{7}$."], a: [true, true, true, true], t: "Xác suất toàn phần & Bayes", e: ["Đúng: $P(C \\cap N) = P(N|C)P(C) = 0.6 \\times 0.2 = 0.12$.", "Đúng: $P(N) = P(N|C)P(C) + P(N|\\overline{C})P(\\overline{C}) = 0.6 \\times 0.2 + 0.4 \\times 0.8 = 0.12 + 0.32 = 0.44$.", "Đúng: $P(C|N) = \\frac{P(N|C)P(C)}{P(N)} = \\frac{0.12}{0.44} = \\frac{12}{44} = \\frac{3}{11}$.", "Đúng: $P(C|Nam) = \\frac{P(Nam|C)P(C)}{P(Nam)} = \\frac{(1-0.6) \\times 0.2}{1 - 0.44} = \\frac{0.08}{0.56} = \\frac{1}{7}$."] },
+                { type: "sa", l: 2, q: "Lớp 12A có 60% học sinh nam. Tỉ lệ giỏi toán của nam là 30%, của nữ là 20%. Tính xác suất chọn ngẫu nhiên một học sinh lớp 12A là học sinh giỏi toán.", a: "0.26", t: "Xác suất toàn phần", e: "$P(G) = P(G|Nam)P(Nam) + P(G|Nữ)P(Nữ) = 0.3 \\times 0.6 + 0.2 \\times 0.4 = 0.18 + 0.08 = 0.26$." },
+                { type: "sa", l: 3, q: "Cho $P(A) = 0.5$, $P(B) = 0.4$, $P(A \\cap B) = 0.1$. Tính xác suất $P(B|A)$.", a: "0.2", t: "Xác suất có điều kiện", e: "$P(B|A) = \\frac{P(A \\cap B)}{P(A)} = \\frac{0.1}{0.5} = 0.2$." },
+                { type: "sa", l: 4, q: "Máy A sản xuất 40% sản phẩm, máy B sản xuất 60%. Tỉ lệ lỗi của máy A là 1%, máy B là 2%. Chọn ngẫu nhiên 1 sản phẩm thấy bị lỗi. Xác suất sản phẩm này do máy A sản xuất là bao nhiêu (nhập phân số dạng a/b)?", a: "1/4", t: "Công thức Bayes", e: "Xác suất lỗi: $P(L) = 0.4 \\times 0.01 + 0.6 \\times 0.02 = 0.016$. Xác suất do máy A: $P(A|L) = \\frac{0.004}{0.016} = \\frac{1}{4}$." }
             ]}
         };
 
@@ -944,7 +964,7 @@
             wList.innerHTML = finalWeak.length ? finalWeak.map(t => `<li class="flex items-center gap-2"><span class="text-rose-500">⚠</span> ${t}</li>`).join('') : '<li class="text-slate-500 italic">Tuyệt vời, không có lỗ hổng lớn nào!</li>';
         }
 
-        // BÁO CÁO NÂNG CẤP CHI TIẾT
+        // BÁO CÁO NÂNG CẤP CHI TIẾT VÀ FIX TOÁN HỌC MƯỢT MÀ
         function downloadReportHTML() {
             const dateStr = new Date().toLocaleDateString('vi-VN');
             const scoreVal = document.getElementById('final-score').innerText;
@@ -1090,15 +1110,29 @@
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Báo Cáo Toán 12 - ${studentName}</title>
-                <script src="https://cdn.tailwindcss.com"><\/script>
+                <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"><\/script>
                 <script>
                     window.MathJax = {
                         tex: { inlineMath: [['$', '$'], ['\\\\(', '\\\\)']], displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']], processEscapes: true },
-                        chtml: { fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2', adaptiveCSS: true }
+                        chtml: { fontURL: '[https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2](https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2)', adaptiveCSS: true },
+                        startup: {
+                            pageReady: () => {
+                                return MathJax.startup.defaultPageReady();
+                            }
+                        }
                     };
                 <\/script>
-                <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"><\/script>
-                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Lexend:wght@700;900&display=swap" rel="stylesheet">
+                <script id="MathJax-script" src="[https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js](https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js)"><\/script>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        setTimeout(function() {
+                            if (window.MathJax && window.MathJax.typesetPromise) {
+                                MathJax.typesetPromise();
+                            }
+                        }, 500);
+                    });
+                <\/script>
+                <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Lexend:wght@700;900&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Lexend:wght@700;900&display=swap)" rel="stylesheet">
                 <style>
                     body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
                     .header-font { font-family: 'Lexend', sans-serif; }
