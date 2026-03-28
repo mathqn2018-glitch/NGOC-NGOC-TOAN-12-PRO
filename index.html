@@ -978,7 +978,7 @@
             let questionsHtml = '';
             activeExamData.questions.forEach((q, idx) => {
                 let qTypeStr = q.type === 'mcq' ? 'Trắc nghiệm 4 đáp án' : (q.type === 'tf' ? 'Đúng/Sai' : 'Trả lời ngắn');
-                let badgeColor = q.type === 'mcq' ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : (q.type === 'tf' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-orange-100 text-orange-700 border-orange-200');
+                let badgeColor = q.type === 'mcq' ? 'bg-indigo-100 text-indigo-800 border-indigo-200' : (q.type === 'tf' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-orange-100 text-orange-800 border-orange-200');
                 
                 const attempt = attemptsHistory[idx] || { userAnswer: null };
 
@@ -989,37 +989,37 @@
                         const isCorrect = oIdx === q.a;
                         const isUserAns = oIdx === attempt.userAnswer;
                         
-                        let style = 'bg-slate-50 border-slate-200';
+                        let style = 'bg-slate-50 border-slate-200 text-slate-600';
                         let badge = '';
                         let letterBg = 'bg-slate-200 text-slate-700';
 
                         if (isCorrect && isUserAns) {
-                            style = 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-500 shadow-md';
-                            letterBg = 'bg-emerald-200 text-emerald-800';
-                            badge = '<span class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold ml-auto shadow-sm">✓ Em chọn đúng</span>';
+                            style = 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-500 shadow-md text-emerald-900';
+                            letterBg = 'bg-emerald-500 text-white';
+                            badge = '<span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold ml-auto shadow-sm border border-emerald-200 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Em chọn đúng</span>';
                         } else if (isCorrect && !isUserAns) {
-                            style = 'bg-emerald-50/50 border-emerald-400 border-dashed border-2';
-                            letterBg = 'bg-emerald-100 text-emerald-700';
-                            badge = '<span class="bg-emerald-100 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold ml-auto">Đáp án đúng</span>';
+                            style = 'bg-sky-50 border-sky-400 border-dashed border-2 text-sky-900';
+                            letterBg = 'bg-sky-200 text-sky-800';
+                            badge = '<span class="bg-sky-100 text-sky-700 border border-sky-200 px-3 py-1 rounded-full text-xs font-bold ml-auto flex items-center gap-1">Đáp án đúng</span>';
                         } else if (!isCorrect && isUserAns) {
-                            style = 'bg-rose-50 border-rose-500 ring-2 ring-rose-500 shadow-md';
-                            letterBg = 'bg-rose-200 text-rose-800';
-                            badge = '<span class="bg-rose-500 text-white px-3 py-1 rounded-full text-xs font-bold ml-auto shadow-sm">✗ Em chọn sai</span>';
+                            style = 'bg-rose-50 border-rose-400 ring-2 ring-rose-400 shadow-md text-rose-900';
+                            letterBg = 'bg-rose-500 text-white';
+                            badge = '<span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-xs font-bold ml-auto shadow-sm border border-rose-200 flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg> Em chọn sai</span>';
                         }
                         
                         optionsHtml += `
-                            <div class="flex items-center p-4 border-2 rounded-2xl ${style}">
+                            <div class="flex items-center p-4 border-2 rounded-2xl ${style} transition-all">
                                 <span class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-bold mr-4 font-sans ${letterBg}">${String.fromCharCode(65+oIdx)}</span>
-                                <div class="math-text text-lg text-slate-800">${opt}</div>
-                                ${badge ? `<div class="ml-auto pl-2">${badge}</div>` : ''}
+                                <div class="math-text text-lg">${opt}</div>
+                                ${badge ? `<div class="ml-auto pl-2 font-sans">${badge}</div>` : ''}
                             </div>`;
                     });
                     optionsHtml += `</div>`;
                     if (attempt.userAnswer === -1 || attempt.userAnswer === null) {
-                        optionsHtml += `<div class="mt-4 text-rose-600 font-bold text-sm italic font-sans flex items-center gap-2">⚠ Em đã bỏ qua hoặc hết giờ không chọn đáp án câu này.</div>`;
+                        optionsHtml += `<div class="mt-4 p-4 bg-orange-50 border border-orange-200 text-orange-700 rounded-xl text-sm italic font-sans flex items-center gap-2 shadow-sm"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> Em đã bỏ qua hoặc hết giờ không chọn đáp án câu này.</div>`;
                     }
                 } else if (q.type === 'tf') {
-                    optionsHtml = `<div class="space-y-3 mt-6">`;
+                    optionsHtml = `<div class="space-y-4 mt-6">`;
                     q.o.forEach((opt, oIdx) => {
                         const correctVal = q.a[oIdx] ? 'ĐÚNG' : 'SAI';
                         const userRaw = attempt.userAnswer ? attempt.userAnswer[oIdx] : null;
@@ -1031,19 +1031,28 @@
                         const isSkipped = userRaw === null;
 
                         let style = 'bg-slate-50 border-slate-200';
-                        if (isMatch) style = 'bg-emerald-50 border-emerald-300';
-                        else if (!isSkipped) style = 'bg-rose-50 border-rose-300';
+                        if (isMatch) style = 'bg-emerald-50 border-emerald-300 ring-1 ring-emerald-400';
+                        else if (!isSkipped) style = 'bg-rose-50 border-rose-300 ring-1 ring-rose-400';
 
-                        const iconMark = isMatch ? '<span class="text-emerald-600 font-bold ml-1">✓</span>' : (isSkipped ? '<span class="text-slate-400 font-bold ml-1">-</span>' : '<span class="text-rose-600 font-bold ml-1">✗</span>');
+                        const iconMark = isMatch ? '<span class="bg-emerald-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-sm">✓</span>' : (isSkipped ? '<span class="bg-slate-300 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">-</span>' : '<span class="bg-rose-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-sm">✗</span>');
 
                         optionsHtml += `
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 border-2 rounded-2xl ${style} gap-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-5 border-2 rounded-2xl ${style} gap-6 transition-all shadow-sm">
                                 <div class="math-text text-lg text-slate-800 flex-1">
-                                    <strong class="text-sky-600 font-sans mr-2 text-base">${String.fromCharCode(97+oIdx)})</strong> ${opt}
+                                    <strong class="text-indigo-600 font-sans mr-3 text-base bg-indigo-100 px-2 py-1 rounded-md shadow-sm">${String.fromCharCode(97+oIdx)}</strong> ${opt}
                                 </div>
-                                <div class="flex flex-col gap-1 sm:items-end font-sans text-sm min-w-max bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-                                    <div class="text-slate-500 font-medium">Bài làm của em: <strong class="${isMatch ? 'text-emerald-600' : (isSkipped ? 'text-slate-400' : 'text-rose-600')}">${userVal}</strong> ${iconMark}</div>
-                                    <div class="text-slate-800 font-medium">Đáp án chuẩn: <strong class="text-sky-600">${correctVal}</strong></div>
+                                <div class="flex flex-col gap-2 font-sans text-sm min-w-max">
+                                    <div class="flex items-center justify-between gap-4 bg-white px-4 py-2 rounded-lg border border-slate-100 shadow-sm">
+                                        <span class="text-slate-500 font-medium">Bài làm của em:</span>
+                                        <div class="flex items-center gap-2">
+                                            <strong class="${isMatch ? 'text-emerald-600' : (isSkipped ? 'text-slate-400' : 'text-rose-600')}">${userVal}</strong>
+                                            ${iconMark}
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-4 bg-sky-50 px-4 py-2 rounded-lg border border-sky-100">
+                                        <span class="text-sky-700 font-medium">Đáp án chuẩn:</span>
+                                        <strong class="text-sky-700">${correctVal}</strong>
+                                    </div>
                                 </div>
                             </div>`;
                     });
@@ -1054,18 +1063,20 @@
                     const isCorrect = attempt.userAnswer && attempt.userAnswer.toString().replace(',', '.').toLowerCase() === correctValStr.replace(',', '.').toLowerCase();
 
                     optionsHtml = `
-                        <div class="mt-6 flex flex-col md:flex-row gap-4">
-                            <div class="p-6 border-2 rounded-2xl flex-1 shadow-sm flex flex-col justify-center ${isCorrect ? 'bg-emerald-50 border-emerald-300 ring-1 ring-emerald-400' : 'bg-rose-50 border-rose-300 ring-1 ring-rose-400'}">
-                                <span class="${isCorrect ? 'text-emerald-700' : 'text-rose-700'} font-bold text-sm uppercase tracking-widest font-sans mb-2 flex items-center gap-2">
-                                    Bài làm của em ${isCorrect ? '✓' : '✗'}
+                        <div class="mt-8 flex flex-col md:flex-row gap-6">
+                            <div class="p-6 border-2 rounded-2xl flex-1 shadow-sm relative overflow-hidden ${isCorrect ? 'bg-emerald-50 border-emerald-400 ring-2 ring-emerald-500' : 'bg-rose-50 border-rose-400 ring-2 ring-rose-500'}">
+                                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl pointer-events-none">${isCorrect ? '✓' : '✗'}</div>
+                                <span class="${isCorrect ? 'text-emerald-700 bg-emerald-100' : 'text-rose-700 bg-rose-100'} px-3 py-1 rounded-full font-bold text-xs uppercase tracking-widest font-sans mb-3 inline-flex items-center gap-2 border ${isCorrect ? 'border-emerald-200' : 'border-rose-200'}">
+                                    Bài làm của em
                                 </span>
-                                <span class="text-2xl font-black ${isCorrect ? 'text-emerald-700' : 'text-rose-700'} math-text break-all">${userValStr}</span>
+                                <div class="text-3xl font-black ${isCorrect ? 'text-emerald-800' : 'text-rose-800'} math-text break-all mt-2">${userValStr}</div>
                             </div>
-                            <div class="p-6 border-2 rounded-2xl bg-sky-50 border-sky-300 flex-1 shadow-sm flex flex-col justify-center">
-                                <span class="text-sky-700 font-bold text-sm uppercase tracking-widest font-sans mb-2 flex items-center gap-2">
+                            <div class="p-6 border-2 rounded-2xl bg-sky-50 border-sky-300 flex-1 shadow-sm relative overflow-hidden">
+                                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl pointer-events-none">★</div>
+                                <span class="text-sky-700 bg-sky-100 border border-sky-200 px-3 py-1 rounded-full font-bold text-xs uppercase tracking-widest font-sans mb-3 inline-flex items-center gap-2">
                                     Đáp án chuẩn
                                 </span>
-                                <span class="text-2xl font-black text-sky-900 math-text break-all">${q.a}</span>
+                                <div class="text-3xl font-black text-sky-900 math-text break-all mt-2">${q.a}</div>
                             </div>
                         </div>`;
                 }
@@ -1075,46 +1086,59 @@
                     expHtml = `<div class="space-y-4">`;
                     q.e.forEach((ex, i) => {
                         expHtml += `
-                            <div class="flex gap-3 items-start">
-                                <span class="font-black text-sky-600 mt-1 uppercase text-sm font-sans bg-sky-100 w-6 h-6 flex items-center justify-center rounded-md flex-shrink-0">${String.fromCharCode(97+i)}</span>
-                                <div class="math-text text-lg text-slate-700 pt-0.5">${ex}</div>
+                            <div class="flex gap-4 items-start p-3 hover:bg-white rounded-xl transition-colors">
+                                <span class="font-black text-white bg-indigo-500 mt-1 uppercase text-sm font-sans w-7 h-7 flex items-center justify-center rounded-lg shadow-sm flex-shrink-0">${String.fromCharCode(97+i)}</span>
+                                <div class="math-text text-lg text-slate-700 pt-0.5 leading-relaxed">${ex}</div>
                             </div>`;
                     });
                     expHtml += `</div>`;
                 } else {
-                    expHtml = `<div class="math-text text-lg text-slate-700">${q.e}</div>`;
+                    expHtml = `<div class="math-text text-lg text-slate-700 leading-relaxed p-2">${q.e}</div>`;
                 }
 
                 questionsHtml += `
-                    <div class="mb-8 p-8 bg-white border border-slate-200 rounded-[2rem] shadow-sm break-inside-avoid">
-                        <div class="flex flex-wrap justify-between items-center gap-4 mb-6 border-b border-slate-100 pb-4">
-                            <h3 class="font-black text-2xl text-slate-800 font-sans">Câu ${idx + 1}</h3>
-                            <span class="text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border font-sans ${badgeColor}">${qTypeStr}</span>
+                    <div class="mb-10 p-8 md:p-10 bg-white border border-slate-200 rounded-[2.5rem] shadow-sm break-inside-avoid relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-slate-200"></div>
+                        <div class="flex flex-wrap justify-between items-center gap-4 mb-8 border-b border-slate-100 pb-5">
+                            <h3 class="font-black text-2xl text-slate-800 font-sans flex items-center gap-3">
+                                <span class="bg-slate-800 text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-md">${idx + 1}</span>
+                                Nội dung câu hỏi
+                            </h3>
+                            <span class="text-xs font-bold px-4 py-2 rounded-xl uppercase tracking-widest border font-sans shadow-sm ${badgeColor}">${qTypeStr}</span>
                         </div>
                         
-                        <div class="text-slate-900 text-xl font-medium leading-relaxed math-text">${q.q}</div>
-                        ${optionsHtml}
-                        <div class="mt-8 p-6 bg-slate-50 border border-slate-200 rounded-2xl">
-                            <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs mb-4 flex items-center gap-2 font-sans">
-                                Hướng dẫn giải chi tiết
-                            </h4>
-                            ${expHtml}
+                        <div class="text-slate-900 text-xl font-medium leading-loose math-text pl-2">${q.q}</div>
+                        
+                        <div class="pl-2">
+                            ${optionsHtml}
+                        </div>
+                        
+                        <div class="mt-10 p-6 md:p-8 bg-slate-50/80 border border-slate-200 rounded-3xl relative">
+                            <div class="absolute -top-4 left-8 bg-amber-100 border border-amber-200 text-amber-700 px-4 py-1.5 rounded-full font-black text-xs uppercase tracking-widest font-sans flex items-center gap-2 shadow-sm">
+                                💡 Hướng dẫn giải chi tiết
+                            </div>
+                            <div class="pt-4">
+                                ${expHtml}
+                            </div>
                         </div>
                     </div>
                 `;
             });
 
+            // Sử dụng các URL chuẩn tuyệt đối (bỏ hết dấu markdown [])
             const htmlContent = `<!DOCTYPE html>
             <html lang="vi">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Báo Cáo Toán 12 - ${studentName}</title>
-                <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"><\/script>
+                <!-- Sửa lỗi tải Tailwind -->
+                <script src="https://cdn.tailwindcss.com"><\/script>
+                <!-- Sửa lỗi tải MathJax -->
                 <script>
                     window.MathJax = {
                         tex: { inlineMath: [['$', '$'], ['\\\\(', '\\\\)']], displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']], processEscapes: true },
-                        chtml: { fontURL: '[https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2](https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2)', adaptiveCSS: true },
+                        chtml: { fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2', adaptiveCSS: true },
                         startup: {
                             pageReady: () => {
                                 return MathJax.startup.defaultPageReady();
@@ -1122,106 +1146,140 @@
                         }
                     };
                 <\/script>
-                <script id="MathJax-script" src="[https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js](https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js)"><\/script>
+                <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"><\/script>
                 <script>
+                    // Bắt buộc render lại toán học sau khi tải xong HTML
                     document.addEventListener("DOMContentLoaded", function() {
                         setTimeout(function() {
                             if (window.MathJax && window.MathJax.typesetPromise) {
                                 MathJax.typesetPromise();
                             }
-                        }, 500);
+                        }, 800);
                     });
                 <\/script>
-                <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Lexend:wght@700;900&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Lexend:wght@700;900&display=swap)" rel="stylesheet">
+                <!-- Sửa lỗi tải Font -->
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&family=Lexend:wght@700;900&display=swap" rel="stylesheet">
                 <style>
-                    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+                    body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #0f172a; }
                     .header-font { font-family: 'Lexend', sans-serif; }
-                    .math-text { font-family: 'Times New Roman', Times, serif !important; font-size: 1.15rem; }
-                    mjx-container[display="true"] { overflow-x: auto; overflow-y: visible; max-width: 100%; padding-bottom: 4px; }
+                    .math-text { font-family: 'Times New Roman', Times, serif !important; font-size: 1.25rem; }
+                    
+                    /* CSS Fix thanh cuộn công thức */
+                    mjx-container[display="true"] { overflow-x: auto; overflow-y: visible; max-width: 100%; padding-bottom: 8px; }
                     mjx-container:not([display="true"]) { overflow: visible !important; display: inline-block; }
+                    mjx-container::-webkit-scrollbar { height: 6px; }
+                    mjx-container::-webkit-scrollbar-track { background: transparent; }
+                    mjx-container::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.5); border-radius: 10px; }
+
                     .developer-text { background: linear-gradient(90deg, #0284c7, #4f46e5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+                    
+                    /* Cấu hình bản in (PDF/Giấy) */
                     @media print {
                         body { background-color: #ffffff; padding: 0 !important; }
-                        .shadow-sm, .shadow-md, .shadow-xl { box-shadow: none !important; }
-                        .print-border { border-color: #cbd5e1 !important; border-width: 1px !important; }
-                        .bg-slate-50 { background-color: #f8fafc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                        .bg-emerald-50 { background-color: #ecfdf5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                        .bg-rose-50 { background-color: #fff1f2 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        .shadow-sm, .shadow-md, .shadow-xl { box-shadow: none !important; border-width: 1px !important; border-color: #e2e8f0 !important; }
+                        .print-border { border: none !important; }
+                        .bg-slate-50, .bg-sky-50, .bg-emerald-50, .bg-rose-50, .bg-orange-50 { background-color: #f8fafc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                         .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
+                        .bg-slate-800 { color: #000 !important; background-color: transparent !important; border: 2px solid #000 !important; }
+                        .bg-indigo-500 { color: #000 !important; background-color: transparent !important; border: 1px solid #000 !important; }
                     }
                 </style>
             </head>
-            <body class="p-4 md:p-8 lg:p-12">
-                <div class="max-w-5xl mx-auto bg-white p-8 md:p-16 rounded-[3rem] shadow-xl border border-slate-200 print-border">
-                    <div class="text-center mb-16 border-b-2 border-dashed border-slate-200 pb-12 relative">
-                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-sky-100 text-sky-700 px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.3em]">
+            <body class="p-2 sm:p-6 md:p-10 lg:p-12">
+                <div class="max-w-5xl mx-auto bg-white p-6 sm:p-10 md:p-16 rounded-[2rem] md:rounded-[3.5rem] shadow-2xl border border-slate-200 print-border relative overflow-hidden">
+                    
+                    <!-- Hình nền trang trí nhẹ -->
+                    <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-sky-50 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-indigo-50 rounded-full blur-3xl"></div>
+
+                    <!-- HEADER BÁO CÁO -->
+                    <div class="text-center mb-16 border-b-2 border-dashed border-slate-200 pb-12 relative z-10">
+                        <div class="inline-block bg-sky-100 text-sky-700 px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.25em] shadow-sm mb-6 border border-sky-200">
                             Đề thi Tốt nghiệp THPT 2025
                         </div>
-                        <h1 class="text-4xl md:text-6xl header-font font-black text-slate-900 uppercase tracking-tight mb-4 mt-4">Kết Quả Bài Thi</h1>
-                        <h2 class="text-xl md:text-2xl font-black developer-text uppercase tracking-widest mb-10">Toán 12 Pro</h2>
-                        <div class="flex flex-wrap justify-center gap-4 text-left">
-                            <div class="bg-slate-50 border border-slate-200 px-6 py-5 rounded-2xl min-w-[200px] flex-1 md:flex-none">
-                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-1.5">Học sinh</p>
-                                <p class="text-xl font-black text-slate-800 truncate">${studentName}</p>
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl header-font font-black text-slate-900 uppercase tracking-tight mb-4">Kết Quả Bài Thi</h1>
+                        <h2 class="text-xl md:text-2xl font-black developer-text uppercase tracking-widest mb-12">Toán 12 Pro</h2>
+                        
+                        <div class="flex flex-wrap justify-center gap-5 text-left">
+                            <div class="bg-white border-2 border-slate-100 px-8 py-6 rounded-3xl min-w-[200px] flex-1 md:flex-none shadow-sm relative overflow-hidden">
+                                <div class="absolute left-0 top-0 h-full w-1.5 bg-sky-400"></div>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-2">Học sinh</p>
+                                <p class="text-xl md:text-2xl font-black text-slate-800 truncate">${studentName}</p>
                             </div>
-                            <div class="bg-slate-50 border border-slate-200 px-6 py-5 rounded-2xl min-w-[180px] flex-1 md:flex-none">
-                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-1.5">Ngày làm bài</p>
-                                <p class="text-xl font-black text-slate-800">${dateStr}</p>
+                            <div class="bg-white border-2 border-slate-100 px-8 py-6 rounded-3xl min-w-[180px] flex-1 md:flex-none shadow-sm relative overflow-hidden">
+                                <div class="absolute left-0 top-0 h-full w-1.5 bg-indigo-400"></div>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-2">Ngày làm bài</p>
+                                <p class="text-xl md:text-2xl font-black text-slate-800">${dateStr}</p>
                             </div>
-                            <div class="bg-sky-50 border border-sky-200 px-6 py-5 rounded-2xl min-w-[300px] w-full md:w-auto flex-1">
-                                <p class="text-[10px] text-sky-600 font-bold uppercase tracking-[0.2em] mb-1.5">Chuyên đề</p>
-                                <p class="text-xl font-black text-sky-900 truncate">${categoryTitle}</p>
+                            <div class="bg-sky-50 border-2 border-sky-200 px-8 py-6 rounded-3xl min-w-[300px] w-full md:w-auto flex-1 shadow-sm relative overflow-hidden">
+                                <div class="absolute right-0 top-1/2 transform -translate-y-1/2 opacity-10 text-6xl">📚</div>
+                                <p class="text-[10px] text-sky-600 font-bold uppercase tracking-[0.2em] mb-2">Chuyên đề</p>
+                                <p class="text-xl md:text-2xl font-black text-sky-900 truncate pr-6">${categoryTitle}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex flex-col md:flex-row gap-6 mb-16">
-                        <div class="md:w-1/3 bg-gradient-to-br from-sky-500 to-indigo-600 p-8 rounded-[2.5rem] text-center flex flex-col justify-center items-center shadow-lg text-white">
-                            <p class="text-xs text-sky-100 font-black uppercase tracking-widest mb-2 opacity-80">Điểm số</p>
-                            <div class="flex items-baseline justify-center">
-                                <p class="text-8xl header-font font-black tracking-tighter drop-shadow-md">${scoreVal}</p>
-                                <p class="text-2xl font-bold text-sky-200 ml-2">/ 10</p>
+                    <!-- TỔNG QUAN ĐIỂM SỐ -->
+                    <div class="flex flex-col lg:flex-row gap-8 mb-16 relative z-10">
+                        <div class="lg:w-1/3 bg-slate-900 p-10 rounded-[3rem] text-center flex flex-col justify-center items-center shadow-xl text-white relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-sky-600/30 to-indigo-600/30"></div>
+                            <p class="text-xs text-sky-200 font-bold uppercase tracking-[0.2em] mb-4 relative z-10">Điểm số</p>
+                            <div class="flex items-baseline justify-center relative z-10">
+                                <p class="text-8xl lg:text-9xl header-font font-black tracking-tighter drop-shadow-md">${scoreVal}</p>
+                                <p class="text-3xl font-bold text-slate-400 ml-2">/ 10</p>
                             </div>
                         </div>
-                        <div class="md:w-2/3 bg-white border-2 border-slate-100 p-8 rounded-[2.5rem] shadow-sm">
-                            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mb-4 border-b border-slate-100 pb-3">Nhận xét chi tiết</p>
-                            <p class="text-2xl header-font font-black text-slate-800 uppercase tracking-wide mb-4">${evalText}</p>
-                            <p class="text-slate-600 text-lg leading-relaxed font-medium bg-slate-50 p-5 rounded-2xl border border-slate-100">${adviceText}</p>
+                        <div class="lg:w-2/3 bg-white border border-slate-200 p-8 md:p-10 rounded-[3rem] shadow-md flex flex-col justify-center">
+                            <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                                <span class="bg-amber-100 text-amber-600 p-2 rounded-xl">⭐</span>
+                                <p class="text-sm text-slate-500 font-bold uppercase tracking-[0.15em]">Đánh giá giáo viên</p>
+                            </div>
+                            <p class="text-3xl header-font font-black text-slate-800 uppercase tracking-wide mb-4">${evalText}</p>
+                            <p class="text-slate-600 text-lg leading-relaxed font-medium bg-slate-50 p-6 rounded-2xl border border-slate-100">${adviceText}</p>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-                        <div class="bg-emerald-50/50 border-2 border-emerald-100 p-8 rounded-[2.5rem]">
-                            <h4 class="text-emerald-700 font-black text-sm uppercase tracking-widest mb-6 flex items-center gap-3">
-                                <span class="bg-emerald-200 text-emerald-800 w-8 h-8 rounded-full flex items-center justify-center text-lg">✓</span> Kiến thức vững
+                    <!-- KIẾN THỨC VỮNG / YẾU -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 relative z-10">
+                        <div class="bg-emerald-50/80 border border-emerald-200 p-8 md:p-10 rounded-[2.5rem] shadow-sm">
+                            <h4 class="text-emerald-800 font-black text-base uppercase tracking-widest mb-6 flex items-center gap-4">
+                                <span class="bg-emerald-500 text-white w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm">✓</span> 
+                                Kiến thức vững
                             </h4>
-                            <ul class="text-emerald-900 font-medium space-y-4 pl-2 text-lg">
-                                ${uniqMastered.length ? uniqMastered.map(t => `<li class="flex items-center gap-3"><div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div> ${t}</li>`).join('') : '<li class="italic text-emerald-600/70 font-normal">Chưa có phần nào đạt yêu cầu.</li>'}
+                            <ul class="text-emerald-900 font-medium space-y-4 pl-1 text-lg">
+                                ${uniqMastered.length ? uniqMastered.map(t => `<li class="flex items-start gap-3"><div class="w-2 h-2 rounded-full bg-emerald-500 mt-2.5 flex-shrink-0"></div> <span class="leading-relaxed">${t}</span></li>`).join('') : '<li class="italic text-emerald-600/70 font-normal py-2">Chưa có phần nào đạt yêu cầu.</li>'}
                             </ul>
                         </div>
-                        <div class="bg-rose-50/50 border-2 border-rose-100 p-8 rounded-[2.5rem]">
-                            <h4 class="text-rose-700 font-black text-sm uppercase tracking-widest mb-6 flex items-center gap-3">
-                                <span class="bg-rose-200 text-rose-800 w-8 h-8 rounded-full flex items-center justify-center text-lg">⚠</span> Cần ôn tập lại
+                        <div class="bg-rose-50/80 border border-rose-200 p-8 md:p-10 rounded-[2.5rem] shadow-sm">
+                            <h4 class="text-rose-800 font-black text-base uppercase tracking-widest mb-6 flex items-center gap-4">
+                                <span class="bg-rose-500 text-white w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm">⚠</span> 
+                                Cần ôn tập lại
                             </h4>
-                            <ul class="text-rose-900 font-medium space-y-4 pl-2 text-lg">
-                                ${uniqWeak.length ? uniqWeak.map(t => `<li class="flex items-center gap-3"><div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div> ${t}</li>`).join('') : '<li class="italic text-rose-600/70 font-normal">Tuyệt vời, không phát hiện lỗ hổng!</li>'}
+                            <ul class="text-rose-900 font-medium space-y-4 pl-1 text-lg">
+                                ${uniqWeak.length ? uniqWeak.map(t => `<li class="flex items-start gap-3"><div class="w-2 h-2 rounded-full bg-rose-500 mt-2.5 flex-shrink-0"></div> <span class="leading-relaxed">${t}</span></li>`).join('') : '<li class="italic text-rose-600/70 font-normal py-2">Tuyệt vời, không phát hiện lỗ hổng!</li>'}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="border-t-2 border-dashed border-slate-200 pt-16">
-                        <div class="text-center mb-12">
-                            <h2 class="text-2xl header-font font-black text-slate-800 uppercase tracking-[0.2em] inline-block bg-slate-100 px-8 py-4 rounded-2xl">Chi Tiết Bài Làm & Đáp Án</h2>
+                    <!-- DANH SÁCH CÂU HỎI -->
+                    <div class="relative z-10">
+                        <div class="text-center mb-14 relative">
+                            <div class="absolute inset-0 flex items-center" aria-hidden="true"><div class="w-full border-t-2 border-dashed border-slate-200"></div></div>
+                            <div class="relative flex justify-center">
+                                <h2 class="text-2xl header-font font-black text-slate-800 uppercase tracking-[0.2em] bg-white px-8 py-2">Chi Tiết Bài Làm & Đáp Án</h2>
+                            </div>
                         </div>
-                        <div class="space-y-6 bg-slate-50 p-4 md:p-8 rounded-[3rem]">
+                        
+                        <div class="space-y-10">
                             ${questionsHtml}
                         </div>
                     </div>
                     
-                    <div class="mt-20 pt-10 text-center border-t-2 border-slate-100 flex flex-col items-center justify-center">
-                        <div class="bg-slate-100 rounded-full w-16 h-16 flex items-center justify-center text-2xl mb-4 shadow-inner">🎓</div>
-                        <p class="text-slate-500 font-medium mb-2">Báo cáo được trích xuất tự động từ hệ thống kiểm tra</p>
-                        <p class="text-slate-400 text-sm font-bold uppercase tracking-widest">
+                    <!-- CHỮ KÝ FOOTER -->
+                    <div class="mt-24 pt-12 text-center border-t-2 border-slate-100 flex flex-col items-center justify-center relative z-10">
+                        <div class="bg-slate-900 rounded-2xl w-16 h-16 flex items-center justify-center text-2xl mb-6 shadow-xl transform rotate-3 hover:rotate-0 transition-transform">🎓</div>
+                        <p class="text-slate-500 font-medium mb-3 text-lg">Báo cáo được trích xuất tự động từ hệ thống kiểm tra</p>
+                        <p class="text-slate-400 text-sm font-bold uppercase tracking-widest bg-slate-50 px-6 py-3 rounded-full border border-slate-100">
                             Thiết kế & Phát triển bởi <span class="developer-text font-black text-base ml-1">PHAN THỊ NGỌC THÁI</span>
                         </p>
                     </div>
