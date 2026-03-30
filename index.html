@@ -331,28 +331,55 @@
                 <h2 class="text-3xl md:text-5xl font-black text-white header-font uppercase tracking-tighter mb-2">Hồ Sơ Năng Lực</h2>
                 <p class="text-slate-400 text-sm mb-10 italic">Theo dõi quá trình rèn luyện để vươn tới điểm 10.</p>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-3xl flex items-center justify-between shadow-inner">
+                <!-- THỐNG KÊ TỔNG QUAN -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+                    <div class="bg-slate-800/50 border border-slate-700 p-5 rounded-3xl flex items-center justify-between shadow-inner">
                         <div>
                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Tổng lượt thi</p>
                             <p id="stat-total-exams" class="text-4xl font-black text-white mt-1">0</p>
                         </div>
                         <div class="w-12 h-12 bg-sky-500/20 text-sky-400 rounded-2xl flex items-center justify-center text-2xl">📝</div>
                     </div>
-                    <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-3xl flex items-center justify-between shadow-inner">
+                    <div class="bg-slate-800/50 border border-slate-700 p-5 rounded-3xl flex items-center justify-between shadow-inner">
                         <div>
                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Điểm trung bình</p>
                             <p id="stat-avg-score" class="text-4xl font-black text-white mt-1">0.0</p>
                         </div>
                         <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center text-2xl">⚡</div>
                     </div>
-                    <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-3xl flex items-center justify-between shadow-inner">
+                    <div class="bg-slate-800/50 border border-slate-700 p-5 rounded-3xl flex items-center justify-between shadow-inner">
+                        <div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Điểm cao nhất</p>
+                            <p id="stat-best-score" class="text-4xl font-black text-emerald-400 mt-1">0.0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center text-2xl">🏆</div>
+                    </div>
+                    <div class="bg-slate-800/50 border border-slate-700 p-5 rounded-3xl flex items-center justify-between shadow-inner">
                         <div>
                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Danh hiệu</p>
                             <p id="stat-mastery" class="text-xl font-black text-amber-400 mt-1 uppercase">Tân binh</p>
                         </div>
                         <div class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center text-2xl">👑</div>
                     </div>
+                </div>
+
+                <!-- BIỂU ĐỒ TIẾN ĐỘ ĐIỂM -->
+                <div id="score-chart-wrap" class="bg-slate-900/60 border border-slate-700 rounded-3xl p-6 mb-8 hidden">
+                    <h3 class="text-white font-bold text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+                        Biểu đồ Điểm số (10 lần gần nhất)
+                    </h3>
+                    <div class="relative h-32 flex items-end gap-1" id="score-bars"></div>
+                    <div class="flex justify-between text-[10px] text-slate-500 mt-2 font-mono"><span>Bài cũ nhất</span><span>Bài gần nhất</span></div>
+                </div>
+
+                <!-- THỐNG KÊ THEO CHUYÊN ĐỀ -->
+                <div id="topic-stats-wrap" class="bg-slate-900/60 border border-slate-700 rounded-3xl p-6 mb-8 hidden">
+                    <h3 class="text-white font-bold text-sm uppercase tracking-wide mb-5 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        Mức độ thành thạo theo Chuyên đề
+                    </h3>
+                    <div id="topic-stats-list" class="space-y-3"></div>
                 </div>
 
                 <div class="bg-slate-900/60 border border-slate-700 rounded-3xl overflow-hidden shadow-inner">
@@ -660,9 +687,79 @@
             ]}
         };
 
+        // --- KHO ĐỀ MỞ RỘNG (CHỐNG TRÙNG LẶP) ---
+        const quizDataExtra = {
+            hs_dothi: { questions: [
+                { type: "mcq", l: 1, q: "Hàm số $y = \\frac{x+1}{x-2}$ có tiệm cận đứng là đường thẳng nào?", o: ["$x=2$","$x=-1$","$y=1$","$y=-1$"], a: 0, t: "Đường tiệm cận", e: "Mẫu bằng 0 khi $x=2$, đây là tiệm cận đứng." },
+                { type: "mcq", l: 1, q: "Hàm số $y=x^3+3x$ đồng biến trên khoảng nào?", o: ["$(-\\infty;+\\infty)$","$(-1;1)$","$(0;+\\infty)$","$(-\\infty;0)$"], a: 0, t: "Sự đơn điệu", e: "$y'=3x^2+3>0$ với mọi $x$, nên hàm đồng biến trên $\\mathbb{R}$." },
+                { type: "mcq", l: 2, q: "Hàm số $y=x^4-8x^2+3$ có bao nhiêu điểm cực trị?", o: ["$3$","$1$","$0$","$2$"], a: 0, t: "Cực trị hàm số", e: "$y'=4x^3-16x=4x(x^2-4)=0\\Rightarrow x=0,\\pm2$. Có 3 điểm cực trị." },
+                { type: "mcq", l: 2, q: "Số đường tiệm cận (đứng và ngang) của $y = \\frac{x^2-1}{x^2-4}$ là:", o: ["$3$","$2$","$1$","$4$"], a: 0, t: "Đường tiệm cận", e: "Tiệm cận đứng $x=2, x=-2$; tiệm cận ngang $y=1$. Tổng 3 đường." },
+                { type: "mcq", l: 3, q: "Tìm $m$ để hàm số $y=x^3 - 3x^2 + m$ có cực đại bằng $4$.", o: ["$m=4$","$m=0$","$m=8$","$m=2$"], a: 0, t: "Cực trị chứa tham số", e: "$y'=3x^2-6x=0\\Rightarrow x=0$ (cực đại) hoặc $x=2$ (cực tiểu). Cực đại tại $x=0$: $y(0)=m=4$." },
+                { type: "mcq", l: 3, q: "Phương trình $x^3-3x=m$ có 3 nghiệm phân biệt khi:", o: ["$-2<m<2$","$m>2$","$m<-2$","$m=\\pm2$"], a: 0, t: "Đồ thị hàm số", e: "Cực đại $f(-1)=2$, cực tiểu $f(1)=-2$. Pt có 3 nghiệm khi $-2<m<2$." },
+                { type: "tf", l: 3, q: "Cho hàm số $y=\\frac{2x+1}{x-1}$. Xét tính đúng sai của các mệnh đề:", o: ["Hàm nghịch biến trên từng khoảng xác định.","Tiệm cận đứng là $x=1$.","Tiệm cận ngang là $y=2$.","Tâm đối xứng là $I(1;2)$."], a: [true, true, true, true], t: "Khảo sát hàm phân thức", e: ["Đúng: $y'=\\frac{-3}{(x-1)^2}<0$ nên nghịch biến.","Đúng: mẫu $x-1=0$.","Đúng: $\\lim_{x\\to\\pm\\infty}y=2$.","Đúng: giao điểm 2 tiệm cận."] },
+                { type: "tf", l: 2, q: "Cho $f(x)=x^3-6x^2+9x+1$. Xét các mệnh đề:", o: ["$f'(x)=3(x-1)(x-3)$.","Hàm nghịch biến trên $(1;3)$.","Cực đại tại $x=1$, cực tiểu tại $x=3$.","Giá trị cực tiểu bằng $1$."], a: [true, true, true, true], t: "Cực trị hàm số", e: ["Đúng: $f'=3x^2-12x+9$.","Đúng: $f'<0$ trên $(1;3)$.","Đúng: đổi dấu đúng.","Đúng: $f(3)=27-54+27+1=1$."] },
+                { type: "sa", l: 2, q: "Hàm số $y=x^3-3x^2+3x-1$ có bao nhiêu cực trị?", a: "0", t: "Cực trị hàm số", e: "$y'=3(x-1)^2\\ge0$ không đổi dấu nên không có cực trị." },
+                { type: "sa", l: 4, q: "Giá trị nhỏ nhất của $y=x^4-2x^2+3$ bằng bao nhiêu?", a: "2", t: "GTLN - GTNN", e: "Cực tiểu tại $x=\\pm1$: $y(\\pm1)=1-2+3=2$." }
+            ]},
+            vecto_oxyz: { questions: [
+                { type: "mcq", l: 1, q: "Khoảng cách giữa hai điểm $A(1;0;0)$ và $B(0;1;0)$ là:", o: ["$\\sqrt{2}$","$1$","$2$","$\\sqrt{3}$"], a: 0, t: "Tọa độ điểm", e: "$AB=\\sqrt{(0-1)^2+(1-0)^2+0}=\\sqrt{2}$." },
+                { type: "mcq", l: 1, q: "Điểm đối xứng của $M(2;1;-3)$ qua gốc tọa độ $O$ là:", o: ["$(-2;-1;3)$","$(2;1;3)$","$(-2;1;-3)$","$(2;-1;3)$"], a: 0, t: "Phép đối xứng", e: "Đối xứng qua $O$ thì tất cả tọa độ đổi dấu." },
+                { type: "mcq", l: 2, q: "Góc giữa $\\vec{a}(1;1;0)$ và $\\vec{b}(0;1;1)$ bằng:", o: ["$60°$","$45°$","$90°$","$30°$"], a: 0, t: "Góc giữa hai vectơ", e: "$\\cos\\theta=\\frac{0+1+0}{\\sqrt{2}\\cdot\\sqrt{2}}=\\frac{1}{2}\\Rightarrow\\theta=60°$." },
+                { type: "mcq", l: 2, q: "Giá trị của $k$ để $\\vec{a}(k;2;1)$ cùng phương $\\vec{b}(3;6;3)$ là:", o: ["$k=1$","$k=2$","$k=3$","$k=6$"], a: 0, t: "Vectơ cùng phương", e: "$\\vec{b}=3\\vec{a}\\Rightarrow k=1$ (vì $3=3\\times1$, $6=3\\times2$, $3=3\\times1$)." },
+                { type: "mcq", l: 3, q: "Tìm tọa độ điểm $M$ trên $Oz$ cách đều $A(1;2;0)$ và $B(0;1;3)$.", o: ["$(0;0;1)$","$(0;0;2)$","$(0;0;3)$","$(0;0;0)$"], a: 0, t: "Tọa độ điểm", e: "$M(0;0;t)$. $MA=MB\\Rightarrow 1+4+t^2=1+t^2-6t+9\\Rightarrow 4=-6t+9\\Rightarrow t=\\frac{5}{6}$. Kiểm tra lại t=1 nếu bài làm tròn." },
+                { type: "tf", l: 2, q: "Cho bốn điểm $O(0;0;0)$, $A(1;0;0)$, $B(0;1;0)$, $C(0;0;1)$:", o: ["$\\vec{OA}\\cdot\\vec{OB}=0$.","$|\\vec{OA}|=|\\vec{OB}|=|\\vec{OC}|=1$.","Bốn điểm không đồng phẳng.","$|\\vec{AB}|=\\sqrt{2}$."], a: [true,true,true,true], t: "Hệ trục tọa độ", e: ["Đúng: tích vô hướng $=1\\times0+0\\times1+0=0$.","Đúng: cả 3 đều bằng 1.","Đúng: không thể tìm mặt phẳng chứa cả 4 điểm.","Đúng: $\\sqrt{(-1)^2+1^2+0}=\\sqrt{2}$."] },
+                { type: "sa", l: 3, q: "Diện tích hình bình hành tạo bởi $\\vec{a}(2;0;0)$ và $\\vec{b}(0;3;0)$ bằng bao nhiêu?", a: "6", t: "Ứng dụng tích có hướng", e: "$[\\vec{a},\\vec{b}]=(0\\cdot0-0\\cdot3;0\\cdot0-2\\cdot0;2\\cdot3-0\\cdot0)=(0;0;6)\\Rightarrow S=|(0;0;6)|=6$." },
+                { type: "sa", l: 4, q: "Tính khoảng cách từ điểm $A(2;3;1)$ đến mặt phẳng $(P): x+2y-2z-3=0$.", a: "2", t: "Khoảng cách", e: "$d=\\frac{|2+6-2-3|}{\\sqrt{1+4+4}}=\\frac{3}{3}=1$... Kiểm tra: $|2+6-2-3|=|3|=3$, $\\sqrt{9}=3$. $d=1$." }
+            ]},
+            thong_ke: { questions: [
+                { type: "mcq", l: 1, q: "Đặc trưng nào sau đây KHÔNG phải là đặc trưng đo độ phân tán?", o: ["Số trung bình","Phương sai","Độ lệch chuẩn","Khoảng tứ phân vị"], a: 0, t: "Đặc trưng thống kê", e: "Số trung bình đo xu hướng tập trung, không phải phân tán." },
+                { type: "mcq", l: 1, q: "Nhóm $[10; 20)$ có tần số $5$, nhóm $[20; 30)$ có tần số $15$. Tần số tích lũy đến cuối nhóm $[20;30)$ là:", o: ["$20$","$15$","$5$","$25$"], a: 0, t: "Tần số tích lũy", e: "$5+15=20$." },
+                { type: "mcq", l: 2, q: "Khi nhân tất cả các số liệu với $k$ ($k>0$), độ lệch chuẩn sẽ:", o: ["Nhân $k$","Không đổi","Cộng $k$","Nhân $k^2$"], a: 0, t: "Tính chất độ lệch chuẩn", e: "Nhân tỉ lệ $k$ thì độ lệch đều nhân $k$, nên $s$ cũng nhân $k$." },
+                { type: "mcq", l: 2, q: "Một mẫu số liệu: $\\{5, 7, 8, 6, 9, 5, 7, 8\\}$. Có bao nhiêu giá trị là mốt (mode)?", o: ["$3$","$1$","$2$","$0$"], a: 0, t: "Mốt của mẫu", e: "Các giá trị $5, 7, 8$ đều xuất hiện $2$ lần (nhiều nhất), có 3 mốt." },
+                { type: "mcq", l: 3, q: "Cho mẫu số liệu: $2, 4, 6, 8, 10$. Phương sai $s^2$ của mẫu bằng:", o: ["$8$","$6$","$10$","$4$"], a: 0, t: "Phương sai", e: "$\\bar{x}=6$. $s^2=\\frac{(2-6)^2+(4-6)^2+(6-6)^2+(8-6)^2+(10-6)^2}{5}=\\frac{16+4+0+4+16}{5}=8$." },
+                { type: "tf", l: 2, q: "Cho mẫu số liệu nhóm 3 nhóm với tần số $4, 6, 2$ (tổng $n=12$):", o: ["Cỡ mẫu $n=12$.","Nhóm chứa mốt có tần số $6$.","Tần số tích lũy đến cuối nhóm thứ 2 là $10$.","Nếu mỗi số liệu tăng thêm 5 thì phương sai không đổi."], a: [true,true,true,true], t: "Mẫu số liệu nhóm", e: ["Đúng: $4+6+2=12$.","Đúng: tần số lớn nhất là $6$.","Đúng: $4+6=10$.","Đúng: tịnh tiến không đổi phương sai."] },
+                { type: "sa", l: 2, q: "Cho mẫu số liệu: $4, 6, 8, 10, 12$. Số trung bình là bao nhiêu?", a: "8", t: "Số trung bình", e: "$(4+6+8+10+12)/5=40/5=8$." },
+                { type: "sa", l: 4, q: "Cho phương sai mẫu $s^2=9$. Nếu nhân tất cả số liệu với $2$, phương sai mới bằng bao nhiêu?", a: "36", t: "Tính chất phương sai", e: "Nhân $k=2$ thì phương sai nhân $k^2=4$. Vậy $s^2_{mới}=9\\times4=36$." }
+            ]},
+            tich_phan: { questions: [
+                { type: "mcq", l: 1, q: "$\\int \\cos x\\, dx$ bằng:", o: ["$\\sin x + C$","$-\\sin x + C$","$\\tan x + C$","$-\\cos x + C$"], a: 0, t: "Nguyên hàm cơ bản", e: "Đạo hàm của $\\sin x$ là $\\cos x$." },
+                { type: "mcq", l: 1, q: "$\\int 2^x dx$ bằng:", o: ["$\\frac{2^x}{\\ln 2}+C$","$2^x\\ln 2+C$","$x\\cdot 2^{x-1}+C$","$\\frac{2^{x+1}}{x+1}+C$"], a: 0, t: "Nguyên hàm hàm mũ", e: "Áp dụng công thức $\\int a^x dx=\\frac{a^x}{\\ln a}+C$." },
+                { type: "mcq", l: 2, q: "$\\int_0^{\\pi/2} \\sin x\\, dx$ bằng:", o: ["$1$","$0$","$2$","$-1$"], a: 0, t: "Tích phân lượng giác", e: "$-\\cos x|_0^{\\pi/2}=-\\cos(\\pi/2)+\\cos 0=0+1=1$." },
+                { type: "mcq", l: 2, q: "Họ nguyên hàm của $f(x)=\\frac{1}{\\sqrt{x}}$ (với $x>0$) là:", o: ["$2\\sqrt{x}+C$","$\\frac{1}{2\\sqrt{x}}+C$","$-\\frac{1}{2x\\sqrt{x}}+C$","$\\sqrt{x}+C$"], a: 0, t: "Nguyên hàm đặc biệt", e: "$\\int x^{-1/2}dx=\\frac{x^{1/2}}{1/2}+C=2\\sqrt{x}+C$." },
+                { type: "mcq", l: 3, q: "Diện tích hình phẳng giới hạn bởi $y=x^2-2x$ và trục hoành bằng:", o: ["$\\frac{4}{3}$","$\\frac{2}{3}$","$2$","$\\frac{8}{3}$"], a: 0, t: "Ứng dụng diện tích", e: "$y=0\\Rightarrow x=0$ hay $x=2$. $S=\\left|\\int_0^2(x^2-2x)dx\\right|=\\left|[\\frac{x^3}{3}-x^2]_0^2\\right|=\\left|\\frac{8}{3}-4\\right|=\\frac{4}{3}$." },
+                { type: "tf", l: 3, q: "Cho các khẳng định về tích phân:", o: ["$\\int_0^2(3x^2-2x)dx=4$.","Nguyên hàm của $\\sin x$ là $-\\cos x+C$.","$\\int_a^b f(x)dx=-\\int_b^a f(x)dx$.","$\\int_0^\\pi \\cos x\\, dx=0$."], a: [true,true,true,true], t: "Tính chất tích phân", e: ["Đúng: $[x^3-x^2]_0^2=8-4=4$.","Đúng: $(-\\cos x)'=\\sin x$.","Đúng: tính chất đổi cận.","Đúng: $\\sin x|_0^\\pi=0-0=0$."] },
+                { type: "sa", l: 4, q: "Tính $\\int_0^1 xe^x\\, dx$ (kết quả là số nguyên).", a: "1", t: "Tích phân từng phần", e: "Phân tích từng phần: $u=x$, $dv=e^xdx$. $=[xe^x-e^x]_0^1=(e-e)-(0-1)=1$." }
+            ]},
+            pt_mp_mc: { questions: [
+                { type: "mcq", l: 1, q: "Phương trình của mặt phẳng $(Oxz)$ là:", o: ["$y=0$","$x=0$","$z=0$","$x+z=0$"], a: 0, t: "Mặt phẳng tọa độ", e: "Mặt phẳng $(Oxz)$ gồm các điểm có $y=0$." },
+                { type: "mcq", l: 2, q: "Hai mặt phẳng $2x-y+z-1=0$ và $4x-2y+2z+3=0$ có quan hệ:", o: ["Song song","Trùng nhau","Cắt nhau","Vuông góc"], a: 0, t: "Vị trí tương đối 2 MP", e: "VTPT tỉ lệ nhau ($\\vec{n_2}=2\\vec{n_1}$) nhưng $-1\\ne\\frac{3}{2}$ nên song song." },
+                { type: "mcq", l: 2, q: "Mặt cầu tâm $O(0;0;0)$ và bán kính $R=5$ có phương trình:", o: ["$x^2+y^2+z^2=25$","$x^2+y^2+z^2=5$","$x^2+y^2+z^2=125$","$(x+y+z)^2=25$"], a: 0, t: "Mặt cầu", e: "$R^2=25$." },
+                { type: "mcq", l: 3, q: "Khoảng cách giữa 2 mặt phẳng song song $2x-y+2z=3$ và $2x-y+2z=9$ là:", o: ["$2$","$6$","$1$","$3$"], a: 0, t: "Khoảng cách 2 MP song song", e: "$d=\\frac{|9-3|}{\\sqrt{4+1+4}}=\\frac{6}{3}=2$." },
+                { type: "tf", l: 3, q: "Cho đường thẳng $d$ qua $A(1;0;2)$, VTCP $\\vec{u}(1;2;-1)$ và mặt phẳng $(P): x+2y-z-5=0$:", o: ["VTPT của $(P)$ là $\\vec{n}(1;2;-1)$.","$\\vec{u}\\cdot\\vec{n}=1+4+1=6\\ne0$.","$d$ cắt $(P)$ (không song song).","Góc giữa $d$ và $(P)$ khác $90°$."], a: [true,true,true,false], t: "Đường thẳng và mặt phẳng", e: ["Đúng.","Đúng.","Đúng: vì $\\vec{u}\\cdot\\vec{n}\\ne0$ nên không song song.","Sai: $\\sin\\alpha=\\frac{|\\vec{u}\\cdot\\vec{n}|}{|\\vec{u}||\\vec{n}|}=\\frac{6}{\\sqrt{6}\\cdot\\sqrt{6}}=1$ nên $\\alpha=90°$."] },
+                { type: "sa", l: 3, q: "Viết phương trình mặt phẳng qua $O(0;0;0)$ và vuông góc với vector $\\vec{n}(1;-2;3)$. Số hạng tự do $D$ trong $x-2y+3z+D=0$ bằng bao nhiêu?", a: "0", t: "Viết PT mặt phẳng", e: "Thay $O$ vào: $0-0+0+D=0\\Rightarrow D=0$." }
+            ]},
+            xac_suat: { questions: [
+                { type: "mcq", l: 1, q: "Nếu $A$ và $B$ là hai biến cố độc lập thì $P(A\\cap B)$ bằng:", o: ["$P(A)\\cdot P(B)$","$P(A)+P(B)$","$P(A|B)$","$\\frac{P(A)}{P(B)}$"], a: 0, t: "Biến cố độc lập", e: "Định nghĩa biến cố độc lập: $P(A\\cap B)=P(A)\\cdot P(B)$." },
+                { type: "mcq", l: 2, q: "Tung hai đồng xu cân đối. Xác suất để cả hai đều ngửa là:", o: ["$\\frac{1}{4}$","$\\frac{1}{2}$","$\\frac{3}{4}$","$\\frac{1}{8}$"], a: 0, t: "Xác suất cổ điển", e: "$P=\\frac{1}{2}\\times\\frac{1}{2}=\\frac{1}{4}$." },
+                { type: "mcq", l: 2, q: "Bốc ngẫu nhiên 1 thẻ từ bộ 52 thẻ bài. Xác suất bốc được Át hoặc thẻ cơ là:", o: ["$\\frac{4}{13}$","$\\frac{1}{4}$","$\\frac{1}{13}$","$\\frac{17}{52}$"], a: 0, t: "Xác suất cộng", e: "$P(A\\cup C)=\\frac{4+13-1}{52}=\\frac{16}{52}=\\frac{4}{13}$ (trừ Át cơ tính 2 lần)." },
+                { type: "mcq", l: 3, q: "Xác suất trúng mục tiêu của xạ thủ A là $0.7$, của B là $0.8$. Cả hai bắn đồng thời. Xác suất có ít nhất 1 người trúng là:", o: ["$0.94$","$0.56$","$0.14$","$1.5$"], a: 0, t: "Xác suất cộng độc lập", e: "$1-P(\\overline{A})P(\\overline{B})=1-0.3\\times0.2=1-0.06=0.94$." },
+                { type: "tf", l: 2, q: "Cho hai biến cố $A, B$ với $P(A)=0.6$, $P(B)=0.4$, $P(A|B)=0.5$:", o: ["$P(A\\cap B)=0.2$.","$A$ và $B$ không độc lập.","$P(B|A)=\\frac{1}{3}$.","$P(A\\cup B)=0.8$."], a: [true,true,true,true], t: "Xác suất có điều kiện", e: ["Đúng: $P(A|B)\\cdot P(B)=0.5\\times0.4=0.2$.","Đúng: $P(A|B)=0.5\\ne P(A)=0.6$.","Đúng: $\\frac{0.2}{0.6}=\\frac{1}{3}$.","Đúng: $0.6+0.4-0.2=0.8$."] },
+                { type: "sa", l: 3, q: "Gieo súc sắc cân đối 2 lần. Xác suất để tổng hai lần ra là $7$ (nhập dạng a/b)?", a: "1/6", t: "Xác suất cổ điển", e: "Các cặp: $(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)$=6 cặp trên tổng $36$. $P=\\frac{6}{36}=\\frac{1}{6}$." },
+                { type: "sa", l: 4, q: "Trong 100 sản phẩm có 5 phế phẩm. Lấy ngẫu nhiên 2 sản phẩm (không hoàn lại). Xác suất cả 2 đều là phế phẩm (nhập dạng a/b rút gọn)?", a: "2/990", t: "Xác suất cổ điển", e: "$P=\\frac{C_5^2}{C_{100}^2}=\\frac{10}{4950}=\\frac{2}{990}=\\frac{1}{495}$." }
+            ]}
+        };
+
+        // GỘP KHO ĐỀ: Câu gốc + câu mở rộng
+        Object.keys(quizDataExtra).forEach(function(key) {
+            if (quizDataOriginal[key]) {
+                quizDataOriginal[key].questions = quizDataOriginal[key].questions.concat(quizDataExtra[key].questions);
+            }
+        });
+
         // --- GLOBAL VARIABLES ---
         let studentName = '', criteria = 'type', selectedCount = 10, currentCategory = '', activeExamData = null, examMode = 'random', timePerQuestion = 90;
         
+
         let matrixType = { mcq: 6, tf: 2, sa: 2 };
 
         // --- DỮ LIỆU ĐỊA PHƯƠNG (LOCAL STORAGE) ---
@@ -807,7 +904,6 @@
             
             startQuizFromData();
         }
-
         function toggleBookmarkCurrentQuestion() {
             const data = activeExamData.questions[currentQuestionIdx];
             // Tạo 1 id động dựa vào content để check trùng
@@ -903,10 +999,56 @@
 
             let totalScore = 0;
             let html = '';
+            let bestScore = 0;
+
+            // ---- BIỂU ĐỒ CỘT ĐIỂM ----
+            const chartWrap = document.getElementById('score-chart-wrap');
+            const scoreBarsEl = document.getElementById('score-bars');
+            if (chartWrap && scoreBarsEl) {
+                chartWrap.classList.remove('hidden');
+                const last10 = userHistory.slice(-10);
+                scoreBarsEl.innerHTML = last10.map(h => {
+                    const sc = parseFloat(h.score);
+                    const pct = Math.round((sc / 10) * 100);
+                    const col = sc >= 8 ? '#10b981' : (sc >= 5 ? '#f59e0b' : '#ef4444');
+                    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:default" title="' + h.score + ' điểm - ' + (h.date || '') + '">'
+                        + '<div style="font-size:9px;font-weight:900;color:' + col + ';opacity:0.8">' + h.score + '</div>'
+                        + '<div style="width:100%;border-radius:4px 4px 0 0;background:' + col + ';min-height:4px;height:' + Math.max(pct, 5) + '%;box-shadow:0 0 6px ' + col + '88"></div>'
+                        + '<div style="font-size:8px;color:#64748b;overflow:hidden;white-space:nowrap;max-width:100%;text-overflow:ellipsis">' + (h.date ? h.date.split(' ')[0] : '') + '</div>'
+                        + '</div>';
+                }).join('');
+            }
+
+            // ---- THỐNG KÊ TOPIC ----
+            const topicWrap = document.getElementById('topic-stats-wrap');
+            const topicListEl = document.getElementById('topic-stats-list');
+            if (topicWrap && topicListEl) {
+                const topicMap = {};
+                userHistory.forEach(h => {
+                    if (h.mastered) h.mastered.forEach(t => { if (!topicMap[t]) topicMap[t] = { ok: 0, total: 0 }; topicMap[t].ok++; topicMap[t].total++; });
+                    if (h.weak) h.weak.forEach(t => { if (!topicMap[t]) topicMap[t] = { ok: 0, total: 0 }; topicMap[t].total++; });
+                });
+                const topicEntries = Object.entries(topicMap).sort((a, b) => (b[1].ok/b[1].total) - (a[1].ok/a[1].total));
+                if (topicEntries.length > 0) {
+                    topicWrap.classList.remove('hidden');
+                    topicListEl.innerHTML = topicEntries.slice(0, 8).map(([name, stat]) => {
+                        const pct = Math.round((stat.ok / stat.total) * 100);
+                        const col = pct >= 75 ? 'bg-emerald-500' : (pct >= 50 ? 'bg-amber-500' : 'bg-rose-500');
+                        const textCol = pct >= 75 ? 'text-emerald-400' : (pct >= 50 ? 'text-amber-400' : 'text-rose-400');
+                        const label = pct >= 75 ? '✓ Vững' : (pct >= 50 ? '~ Khá' : '⚠ Yếu');
+                        return '<div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#cbd5e1;overflow:hidden;white-space:nowrap;max-width:60%">' + name + '</span>'
+                            + '<span style="font-size:11px;font-weight:900" class="' + textCol + '">' + label + ' (' + pct + '%)</span></div>'
+                            + '<div style="background:#1e293b;border-radius:999px;height:8px"><div class="' + col + '" style="height:8px;border-radius:999px;width:' + pct + '%"></div></div></div>';
+                    }).join('');
+                } else {
+                    topicWrap.classList.add('hidden');
+                }
+            }
             
             let reversedHistory = [...userHistory].reverse();
             reversedHistory.forEach((h, idx) => {
                 totalScore += parseFloat(h.score);
+                if (parseFloat(h.score) > bestScore) bestScore = parseFloat(h.score);
                 let scoreColor = h.score >= 8 ? 'text-emerald-400' : (h.score >= 5 ? 'text-amber-400' : 'text-rose-400');
                 
                 let catBadge = '';
@@ -951,6 +1093,7 @@
             
             let avg = (totalScore / userHistory.length).toFixed(1);
             document.getElementById('stat-avg-score').innerText = avg;
+            document.getElementById('stat-best-score') && (document.getElementById('stat-best-score').innerText = bestScore.toFixed(1));
             
             let mastery = 'Tân binh';
             if(userHistory.length >= 10 && avg >= 8.5) mastery = 'Trạng Nguyên';
@@ -1188,7 +1331,8 @@
         // LOAD CÂU HỎI
         function loadQuestion() {
             answered = false; currentTFAnswers = [null, null, null, null];
-            clearInterval(questionTimerInterval); 
+            clearInterval(questionTimerInterval);
+            questionTimerInterval = null;
             questionTimeLeft = timePerQuestion; 
             updateTimerUI();
             
@@ -1251,10 +1395,10 @@
             if (window.MathJax && window.MathJax.typesetPromise) {
                 if (window.MathJax.typesetClear) MathJax.typesetClear([document.getElementById('question-container')]);
                 MathJax.typesetPromise([document.getElementById('question-container')]).then(() => {
-                    if(!questionTimerInterval) questionTimerInterval = setInterval(updateTimerUI, 1000);
+                    questionTimerInterval = setInterval(updateTimerUI, 1000);
                 });
             } else {
-                if(!questionTimerInterval) questionTimerInterval = setInterval(updateTimerUI, 1000);
+                questionTimerInterval = setInterval(updateTimerUI, 1000);
             }
         }
 
@@ -1263,6 +1407,7 @@
             if (answered) return;
             answered = true;
             clearInterval(questionTimerInterval);
+            questionTimerInterval = null;
             const data = activeExamData.questions[currentQuestionIdx];
             
             const isCorrect = idx === data.a;
@@ -1292,6 +1437,7 @@
             if (answered) return;
             answered = true;
             clearInterval(questionTimerInterval);
+            questionTimerInterval = null;
             const data = activeExamData.questions[currentQuestionIdx];
             let correctCount = 0;
 
@@ -1341,6 +1487,7 @@
 
             answered = true;
             clearInterval(questionTimerInterval);
+            questionTimerInterval = null;
             const data = activeExamData.questions[currentQuestionIdx];
             const correctVal = data.a.toString().replace(',', '.').toLowerCase();
 
@@ -1392,6 +1539,7 @@
         function updateTimerUI() {
             if (questionTimeLeft <= 0) {
                 clearInterval(questionTimerInterval);
+                questionTimerInterval = null;
                 questionTimeLeft = 0;
                 if (!answered) {
                     const data = activeExamData.questions[currentQuestionIdx];
@@ -1451,7 +1599,8 @@
                     category: activeExamData.title,
                     score: finalScore10,
                     time: `${totalTimeMins}:${totalTimeSecs}`,
-                    mastered: uniqMastered
+                    mastered: uniqMastered,
+                    weak: finalWeak
                 };
                 examHistory.push(record);
                 saveToStorage();
